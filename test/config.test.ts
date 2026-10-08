@@ -48,7 +48,7 @@ describe("loadConfig", () => {
 
   it("points to setup when nothing is configured", async () => {
     await expect(loadConfig({ VIKUNJA_URL: "tasks.example.com" }, await configFile())).rejects.toThrow(
-      /missing API token\). Run `npx -y @skylive\/vikunja-mcp setup`/,
+      /missing API token\). Run `npx -y @skylivellc\/vikunja-mcp setup`/,
     );
   });
 

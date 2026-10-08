@@ -42,18 +42,18 @@ describe("resolveLauncher", () => {
   const script = (...segments: string[]) => join("/home/me", ...segments, "dist", "cli.js");
 
   it("starts an installed copy directly with absolute paths", () => {
-    const file = script("lib", "node_modules", "@skylive", "vikunja-mcp");
+    const file = script("lib", "node_modules", "@skylivellc", "vikunja-mcp");
     expect(resolveLauncher(file, "/opt/node/bin/node")).toEqual({ command: "/opt/node/bin/node", args: [file] });
   });
 
   it.each([
-    ["npx", script(".npm", "_npx", "abc123", "node_modules", "@skylive", "vikunja-mcp")],
-    ["pnpm dlx", script("Library", "Caches", "pnpm", "dlx", "abc", "node_modules", "@skylive", "vikunja-mcp")],
-    ["yarn dlx", script("tmp", "xfs-1", "dlx-4242", "node_modules", "@skylive", "vikunja-mcp")],
+    ["npx", script(".npm", "_npx", "abc123", "node_modules", "@skylivellc", "vikunja-mcp")],
+    ["pnpm dlx", script("Library", "Caches", "pnpm", "dlx", "abc", "node_modules", "@skylivellc", "vikunja-mcp")],
+    ["yarn dlx", script("tmp", "xfs-1", "dlx-4242", "node_modules", "@skylivellc", "vikunja-mcp")],
   ])("uses npx when running from the %s cache, with node on PATH for GUI apps", (_, file) => {
     expect(resolveLauncher(file, "/opt/node/bin/node")).toEqual({
       command: "/opt/node/bin/npx",
-      args: ["-y", "@skylive/vikunja-mcp"],
+      args: ["-y", "@skylivellc/vikunja-mcp"],
       env: { PATH: "/opt/node/bin:/usr/bin:/bin" },
     });
   });

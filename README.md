@@ -7,7 +7,7 @@ Claude Desktop and other AI agents read your board, create and update tasks, mov
 leave comments.
 
 ```sh
-npx -y @skylive/vikunja-mcp setup
+npx -y @skylivellc/vikunja-mcp setup
 ```
 
 Setup asks for your Vikunja URL and an API token, checks both, saves them, and adds the server to whichever of
@@ -65,7 +65,7 @@ vikunja-mcp serve       Run the server over stdio (the default when a client sta
 For scripts and dotfiles, setup runs without prompts:
 
 ```sh
-printf %s "$TOKEN" | npx -y @skylive/vikunja-mcp setup \
+printf %s "$TOKEN" | npx -y @skylivellc/vikunja-mcp setup \
   --url https://tasks.example.com --token-stdin --client claude-code --client codex --yes
 ```
 
@@ -76,18 +76,18 @@ printf %s "$TOKEN" | npx -y @skylive/vikunja-mcp setup \
 
 Setup stores the URL and token in `~/.config/vikunja-mcp/config.json` (under your user folder on Windows too),
 readable only by you. To save them without registering any client, run
-`npx -y @skylive/vikunja-mcp setup --client none`, then point your client at the server:
+`npx -y @skylivellc/vikunja-mcp setup --client none`, then point your client at the server:
 
 **Claude Code**
 
 ```sh
-claude mcp add --scope user vikunja -- npx -y @skylive/vikunja-mcp
+claude mcp add --scope user vikunja -- npx -y @skylivellc/vikunja-mcp
 ```
 
 **Codex**
 
 ```sh
-codex mcp add vikunja -- npx -y @skylive/vikunja-mcp
+codex mcp add vikunja -- npx -y @skylivellc/vikunja-mcp
 ```
 
 **Claude Desktop, Cursor and other clients**
@@ -95,7 +95,7 @@ codex mcp add vikunja -- npx -y @skylive/vikunja-mcp
 ```json
 {
   "mcpServers": {
-    "vikunja": { "command": "npx", "args": ["-y", "@skylive/vikunja-mcp"] }
+    "vikunja": { "command": "npx", "args": ["-y", "@skylivellc/vikunja-mcp"] }
   }
 }
 ```
@@ -110,7 +110,7 @@ absolute path to `npx` and put node's directory on `PATH`, which is what setup w
 ```json
 {
   "command": "/opt/homebrew/bin/npx",
-  "args": ["-y", "@skylive/vikunja-mcp"],
+  "args": ["-y", "@skylivellc/vikunja-mcp"],
   "env": { "PATH": "/opt/homebrew/bin:/usr/bin:/bin" }
 }
 ```

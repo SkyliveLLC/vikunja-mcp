@@ -1,5 +1,5 @@
 {
-  "name": "@skylive/vikunja-mcp",
+  "name": "@skylivellc/vikunja-mcp",
   "version": "0.1.0",
   "description": "MCP server for Vikunja. Lets Claude, Codex and other AI agents read and update your tasks, with a setup CLI.",
   "keywords": [

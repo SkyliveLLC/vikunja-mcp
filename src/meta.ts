@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { z } from "zod";
 
-export const PACKAGE_NAME = "@skylive/vikunja-mcp";
+export const PACKAGE_NAME = "@skylivellc/vikunja-mcp";
 
 /** Name the server registers under in MCP clients, so tools appear as `mcp__vikunja__*`. */
 export const SERVER_NAME = "vikunja";
