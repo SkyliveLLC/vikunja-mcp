@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [22, 24]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+
+  e2e:
+    name: E2E (Vikunja ${{ matrix.vikunja }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # SHA-256 of each vikunja-<version>-linux-amd64-full.zip release asset.
+          - vikunja: v2.6.0
+            sha256: 44f55c5620cf90f9f125ee2d2fda31db1946230da6d1dbc0f7943aed68db4264
+          - vikunja: v2.7.0
+            sha256: 569861fd690f9ffc812e39e20be3943b882d4549a19e556e47066e71e29ca1b9
+    env:
+      VIKUNJA_SERVICE_INTERFACE: 127.0.0.1:3456
+      VIKUNJA_SERVICE_PUBLICURL: http://127.0.0.1:3456/
+      VIKUNJA_SERVICE_SECRET: ci-only-not-a-secret
+      VIKUNJA_SERVICE_ENABLEREGISTRATION: "true"
+      VIKUNJA_DATABASE_TYPE: sqlite
+      VIKUNJA_MAILER_ENABLED: "false"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Start Vikunja ${{ matrix.vikunja }}
+        env:
+          VERSION: ${{ matrix.vikunja }}
+          SHA256: ${{ matrix.sha256 }}
+        run: |
+          dir="$RUNNER_TEMP/vikunja"
+          curl -fsSL -o "$dir.zip" "https://github.com/go-vikunja/vikunja/releases/download/$VERSION/vikunja-$VERSION-linux-amd64-full.zip"
+          echo "$SHA256  $dir.zip" | sha256sum -c
+          unzip -q "$dir.zip" -d "$dir"
+          export VIKUNJA_DATABASE_PATH="$RUNNER_TEMP/vikunja.db" VIKUNJA_FILES_BASEPATH="$RUNNER_TEMP/files"
+          mkdir -p "$VIKUNJA_FILES_BASEPATH"
+          "$dir/vikunja-$VERSION-linux-amd64" web > "$RUNNER_TEMP/vikunja.log" 2>&1 &
+          for _ in $(seq 1 30); do curl -sf http://127.0.0.1:3456/api/v1/info && exit 0; sleep 1; done
+          cat "$RUNNER_TEMP/vikunja.log"
+          exit 1
+      - run: pnpm test:e2e
+        env:
+          VIKUNJA_E2E_URL: http://127.0.0.1:3456
+      - if: failure()
+        run: cat "$RUNNER_TEMP/vikunja.log"

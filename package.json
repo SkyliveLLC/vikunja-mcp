@@ -1,0 +1,53 @@
+{
+  "name": "@skylive/vikunja-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for Vikunja. Lets Claude, Codex and other AI agents read and update your tasks, with a setup CLI.",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "vikunja",
+    "claude",
+    "claude-code",
+    "codex",
+    "tasks",
+    "todo",
+    "kanban"
+  ],
+  "license": "MIT",
+  "author": "Skylive LLC",
+  "homepage": "https://github.com/SkyliveLLC/vikunja-mcp#readme",
+  "bugs": "https://github.com/SkyliveLLC/vikunja-mcp/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SkyliveLLC/vikunja-mcp.git"
+  },
+  "type": "module",
+  "bin": {
+    "vikunja-mcp": "dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@12.4.1",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "prepare": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc",
+    "test": "vitest run",
+    "test:e2e": "tsc -p tsconfig.build.json && vitest run test/e2e.test.ts"
+  },
+  "dependencies": {
+    "@clack/prompts": "^1.8.1",
+    "@modelcontextprotocol/server": "^2.3.1",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/client": "^2.3.1",
+    "@types/node": "^26.6.4",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3"
+  }
+}
